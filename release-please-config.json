@@ -1,8 +1,8 @@
 {
     "packages": {
-        "packages/host": {
+        "packages/react-electron": {
             "release-type": "node",
-            "package-name": "@reactronx/host",
+            "package-name": "@reactronx/react-electron",
             "bump-minor-pre-major": true,
             "bump-patch-for-minor-pre-major": true
         },
@@ -23,7 +23,7 @@
         {
             "type": "linked-versions",
             "groupName": "reactronx",
-            "components": ["@reactronx/host", "@reactronx/guest", "@reactronx/guest-preload"]
+            "components": ["@reactronx/react-electron", "@reactronx/renderer", "@reactronx/preload"]
         }
     ]
 }

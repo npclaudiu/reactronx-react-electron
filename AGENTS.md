@@ -48,3 +48,7 @@ Process via a custom reconciler.
 
 - Publishing uses NPM Provenance (Trusted Publishing / OIDC).
 - GitHub Actions + Release Please handles release automation.
+- **Release Branches:** Release Please is configured to exclusively track `release-*` branches (e.g., `release-0.1`) for
+  all releases. The `main` branch is not used for releasing. Agents should orchestrate releases and backport fixes by
+  pushing to the appropriate `release-*` tracking branch so Release Please can manage the release PR for that specific
+  version line.

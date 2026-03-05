@@ -2,7 +2,8 @@
 
 ## Summary
 
-The proposed `"use renderer"` directive is a viable direction for Reactronx **if scoped as a module-partitioning and execution-boundary feature**, not as full web-style SSR.
+The proposed `"use renderer"` directive is a viable direction for Reactronx **if scoped as a module-partitioning and
+execution-boundary feature**, not as full web-style SSR.
 
 For Electron, the strongest model is:
 
@@ -10,7 +11,8 @@ For Electron, the strongest model is:
 - Renderer-marked modules become a separate renderer bundle and execute in web context.
 - Data crosses boundaries through explicit, typed IPC contracts.
 
-This can work well, but it raises framework complexity substantially. The core risk is turning a clear architecture (main-driven reconciler) into a partially implicit dual-runtime system that is hard to reason about.
+This can work well, but it raises framework complexity substantially. The core risk is turning a clear architecture
+(main-driven reconciler) into a partially implicit dual-runtime system that is hard to reason about.
 
 ## What the Proposal Means
 
@@ -29,20 +31,18 @@ This can work well, but it raises framework complexity substantially. The core r
 
 ## Core Engineering Challenges
 
-1. Graph partitioning and boundary safety:
-main-only modules must never leak into renderer bundles; renderer-only modules must not import Node/Electron-main-only APIs.
+1. Graph partitioning and boundary safety: main-only modules must never leak into renderer bundles; renderer-only
+   modules must not import Node/Electron-main-only APIs.
 
-2. Serialization and contract design:
-props/state/events crossing main <-> renderer must be serializable and versioned.
+2. Serialization and contract design: props/state/events crossing main <-> renderer must be serializable and versioned.
 
-3. Runtime lifecycle coupling:
-window creation, renderer mount timing, preload bridge readiness, and hot reload behavior become tightly coupled.
+3. Runtime lifecycle coupling: window creation, renderer mount timing, preload bridge readiness, and hot reload behavior
+   become tightly coupled.
 
-4. Debuggability:
-errors can originate in compile partitioning, preload, IPC transport, main reconciler, or renderer runtime.
+4. Debuggability: errors can originate in compile partitioning, preload, IPC transport, main reconciler, or renderer
+   runtime.
 
-5. Security posture:
-feature design must not encourage bypassing preload isolation or broad IPC exposure.
+5. Security posture: feature design must not encourage bypassing preload isolation or broad IPC exposure.
 
 ## SWOT Analysis
 
@@ -88,34 +88,25 @@ Treat “SSR-like” behavior as a later emergent capability, not the initial pr
 
 Ship only when all are true:
 
-1. Static boundary checks:
-build fails on forbidden imports across main/renderer boundaries with actionable messages.
+1. Static boundary checks: build fails on forbidden imports across main/renderer boundaries with actionable messages.
 
-2. Deterministic bundling:
-same module graph always produces the same partitioning outputs.
+2. Deterministic bundling: same module graph always produces the same partitioning outputs.
 
-3. Typed transport contracts:
-no implicit `any`-like payload paths across boundaries.
+3. Typed transport contracts: no implicit `any`-like payload paths across boundaries.
 
-4. Security defaults:
-preload-only bridge exposure with allowlisted channels and least privilege.
+4. Security defaults: preload-only bridge exposure with allowlisted channels and least privilege.
 
-5. Debug tooling:
-clear source maps, boundary traces, and error origin tagging (main/preload/renderer/build).
+5. Debug tooling: clear source maps, boundary traces, and error origin tagging (main/preload/renderer/build).
 
 ## Practical Phased Plan
 
-1. Phase 1:
-`"use renderer"` directive detection + compile-time boundary enforcement + renderer bundle emission.
+1. Phase 1: `"use renderer"` directive detection + compile-time boundary enforcement + renderer bundle emission.
 
-2. Phase 2:
-typed IPC bridge generation for directive boundaries.
+2. Phase 2: typed IPC bridge generation for directive boundaries.
 
-3. Phase 3:
-developer experience layer (error overlays, boundary diagnostics, template scaffolding).
+3. Phase 3: developer experience layer (error overlays, boundary diagnostics, template scaffolding).
 
-4. Phase 4:
-optional higher-level “SSR-like” primitives after runtime boundaries prove stable.
+4. Phase 4: optional higher-level “SSR-like” primitives after runtime boundaries prove stable.
 
 ## Bottom Line
 

@@ -151,6 +151,10 @@ pnpm test:integration
 
 Release automation is handled by Release Please and GitHub Actions, with NPM Provenance enabled for publishing.
 
+Release Please is configured to exclusively track branches matching `release-*` (e.g., `release-0.1`) for all releases.
+When commits are pushed to these branches, Release Please automatically manages a Release PR and tags the release for
+that specific version line. This allows arbitrary releases to be maintained independently.
+
 ## License
 
 BSD-2-Clause

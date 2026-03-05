@@ -13,14 +13,6 @@ distinct process boundaries.
    will write standard React code that orchestrates your Electron primitives and use the custom reconciler to render
    them.
 
-2. **Preload Script (`@reactronx/preload`)**: Inject `@reactronx/preload` into your `preload.js` script. This package
-   will execute within the context isolation boundary, securely bridging the IPC channels required for the renderer to
-   communicate with the host reconciler.
-
-3. **Renderer Process (`@reactronx/renderer`)**: In your web bundles (e.g., your Vite or Webpack frontend), import and
-   initialize `@reactronx/renderer`. This acts as the peer React tree that communicates with the `host` over the
-   injected IPC bridge, completing the loop.
-
 ### Example: Managing Electron with React
 
 Instead of writing imperative EventEmitters and arrays to track open windows, `@reactronx/react-electron` allows you to
@@ -64,96 +56,6 @@ render(<App />);
 ## Packages
 
 - `@reactronx/react-electron`: Main Process reconciler for Electron resources (`<app>`, `<window>`, `<webcontents>`).
-- `@reactronx/preload`: Secure preload bridge exposing constrained IPC APIs.
-- `@reactronx/renderer`: Renderer-side transport client.
-- `reactronx`: CLI for building executable apps and libraries.
-
-## Build Model
-
-`reactronx build` supports two profiles:
-
-- `executable`: builds `main`, optional `preload`, optional `renderer` with **Rspack + SWC**.
-- `library`: builds from a single `entry` using **TypeScript emit** so JavaScript and declarations remain in sync.
-
-TypeScript runtime used by CLI:
-
-1. project-local `typescript` (if installed in consuming project)
-2. bundled `typescript` inside `reactronx`
-
-## Configuration
-
-`reactronx` reads `reactronx.config.ts` from the current working directory.
-
-### Executable Example
-
-```ts
-import { defineConfig } from "reactronx";
-
-export default defineConfig({
-    build: {
-        profile: "executable",
-        main: "src/main.ts",
-        preload: "src/preload.ts",
-        renderer: "src/renderer.ts",
-        outDir: "dist",
-    },
-});
-```
-
-### Library Example
-
-```ts
-import { defineConfig } from "reactronx";
-
-export default defineConfig({
-    build: {
-        profile: "library",
-        entry: "src/index.ts",
-        target: "electron-main",
-        filename: "index.js",
-        declarations: true,
-        tsconfig: "tsconfig.json",
-    },
-});
-```
-
-## Development
-
-```bash
-# Install dependencies
-pnpm install
-
-# Build workspace packages
-pnpm build
-
-# Lint
-pnpm lint
-
-# Typecheck workspace packages
-pnpm typecheck
-
-# Format
-pnpm format
-
-# Build workspace packages, build integration app with reactronx, then run Playwright tests
-pnpm test:integration
-```
-
-## Integration Tests
-
-- Test app lives in `tests/integration/app`.
-- It is built with the installed local dependency binary (`reactronx build`) using
-  `tests/integration/app/reactronx.config.ts`.
-- Playwright specs live in `tests/integration/specs`.
-- Results are written to `tests/integration/results`.
-
-## Release
-
-Release automation is handled by Release Please and GitHub Actions, with NPM Provenance enabled for publishing.
-
-Release Please is configured to exclusively track branches matching `release-*` (e.g., `release-0.1`) for all releases.
-When commits are pushed to these branches, Release Please automatically manages a Release PR and tags the release for
-that specific version line. This allows arbitrary releases to be maintained independently.
 
 ## License
 
